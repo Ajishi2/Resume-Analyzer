@@ -1,0 +1,95 @@
+Build a fully functional, single-page ATS Resume Analyzer & Optimizer Web App using React (with Tailwind CSS for styling). The app should perform enterprise-grade ATS simulation — not simple keyword matching or line-by-line extraction, but deep structural, contextual, and content-level analysis identical to what Fortune 500 ATS systems (Workday, Taleo, Greenhouse, Lever, iCIMS) actually evaluate. Here is the complete specification:
+
+📥 INPUT
+
+Accept resume upload in PDF or DOCX format
+Parse and extract full resume text with section detection (Summary, Experience, Education, Skills, Certifications, Projects, etc.)
+Also allow the user to paste a Job Description (JD) optionally to do JD-specific ATS matching
+
+
+🧠 ATS ANALYSIS ENGINE (Core Feature — Must Be Deep, Not Surface-Level)
+Perform the following checks and flag every issue with a severity level (🔴 Critical / 🟡 Warning / 🟢 Suggestion):
+1. Structural & Format Checks
+
+Detects non-ATS-friendly formatting: tables, columns, text boxes, headers/footers, graphics, icons
+Checks for missing standard sections (every resume MUST have: Contact Info, Summary/Objective, Experience, Education, Skills)
+Flags improper section heading names (e.g., "My Journey" instead of "Work Experience")
+Detects if contact info (email, phone, LinkedIn) is missing or malformed
+Flags use of special characters, emojis, or non-standard fonts/symbols that break parsing
+
+2. Content Quality Checks (This is the deep-level part)
+
+Bullet point analysis: Flags bullets that start with weak or passive words (e.g., "Helped", "Assisted", "Worked on", "Responsible for", "Was involved in") and suggests strong action verbs instead
+Quantification check: Flags any achievement or responsibility that has no measurable metric (numbers, %, $, timeframes) and suggests where to add them
+Vague language detection: Flags terms like "various", "several", "some", "many tasks", "etc.", "and more" as too vague for ATS and human reviewers
+Buzzword / cliché detection: Flags overused meaningless phrases like "team player", "hard worker", "go-getter", "passionate", "results-driven" without evidence, "detail-oriented", "synergy", "leverage", "dynamic"
+Tense consistency: Past tense for past roles, present tense for current role — flags violations
+Length per bullet: Flags bullets that are too short (under 8 words, no substance) or too long (over 35 words, hard to parse)
+Job title accuracy: Checks if job titles used are real, standard industry titles that ATS can map — flags creative/vague titles like "Ninja", "Guru", "Rockstar", "Growth Hacker"
+Date format consistency: Flags inconsistent date formats (e.g., mixing "Jan 2022" with "01/2022")
+Gap detection: Identifies unexplained employment gaps > 6 months and suggests how to address them
+Education section checks: Verifies degree name, institution, graduation year are all present; flags missing GPA if < 5 years out of college
+Skills section evaluation: Flags if skills are listed without context/proof anywhere in experience; detects generic or outdated skills for the detected industry
+Summary/Objective analysis: Checks if it's personalized and relevant or a generic paragraph; flags if it's over 5 lines or under 2 lines
+
+3. ATS Keyword & Scoring (If JD is provided)
+
+Extract hard skills, soft skills, tools, certifications, and role-specific keywords from the JD
+Map them against the resume and show match % per category
+Flag missing high-priority keywords with suggestions on how to naturally incorporate them
+Detect keyword stuffing (same keyword repeated unnaturally)
+
+4. Overall ATS Score
+
+Give a score out of 100 broken into: Format Score, Content Score, Keyword Score (if JD given), Readability Score
+Simulate scores for specific ATS platforms if possible (Taleo tends to be stricter on formatting, Greenhouse focuses more on content, etc.)
+
+
+🖍️ HIGHLIGHT & ANNOTATION UI
+
+Display the full parsed resume text on screen
+Highlight every flagged segment inline with color coding:
+
+🔴 Red highlight = Critical ATS failure
+🟡 Yellow highlight = Warning / weakens the resume
+🟢 Green underline = Good, ATS-friendly content
+
+
+Hovering or clicking a highlighted section opens a side panel or tooltip showing:
+
+What the issue is
+Why ATS systems reject or penalize it
+A concrete suggestion of what to write instead (not generic advice — actual rewritten text)
+
+
+
+
+✏️ INLINE EDITING & CONTENT REPLACEMENT
+
+Every flagged section has an "Edit" button that opens an inline text editor pre-filled with the current text
+The editor also shows the AI-suggested replacement so the user can accept it with one click or modify it themselves
+Changes reflect live in the resume preview
+A "Fix All" button applies all non-conflicting suggested fixes automatically
+
+
+📄 EXPORT
+
+Once edits are complete, allow the user to export the final resume as a clean, ATS-optimized PDF
+The exported PDF must:
+
+Use a single-column, plain text-friendly layout
+Have no tables, graphics, or complex formatting
+Use standard fonts (Arial, Calibri, or Times New Roman)
+Preserve all section headings in a clean hierarchy
+
+
+
+
+🎨 UI/UX REQUIREMENTS
+
+Clean, professional design — two-panel layout: Resume View (left) + Analysis Panel (right)
+Analysis panel has tabs: Overview / Issues / Keyword Match / Score Breakdown
+Mobile responsive
+Dark mode support
+Progress indicator while analysis is running
+Issue count badge per section ("Experience — 4 issues")
