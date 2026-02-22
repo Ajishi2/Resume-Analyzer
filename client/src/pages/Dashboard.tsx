@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { 
   UploadCloud, FileText, FileSearch, CheckCircle2, 
   Download, Sparkles, ChevronRight, LayoutDashboard,
-  Target, AlertCircle
+  Target, AlertCircle, AlertTriangle, Info
 } from "lucide-react";
 import * as Tabs from "@radix-ui/react-tabs";
 import { clsx } from "clsx";

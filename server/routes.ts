@@ -5,7 +5,7 @@ import { api } from "@shared/routes";
 import { z } from "zod";
 import multer from "multer";
 import * as pdfParseModule from "pdf-parse";
-const pdfParse = (pdfParseModule as any).default || pdfParseModule;
+const pdfParse = (pdfParseModule as any).default || (pdfParseModule as any);
 import mammoth from "mammoth";
 import OpenAI from "openai";
 
