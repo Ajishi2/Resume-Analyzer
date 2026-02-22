@@ -52,9 +52,8 @@ export function useParseResume() {
         const data = await res.json();
         return data.text as string;
       } catch (error) {
-        // Fallback for development if /api/parse isn't ready
-        console.warn("[Parse Resume] Backend endpoint missing, returning dummy text.");
-        return `John Doe\nSoftware Engineer\n\nExperience\n\nFrontend Developer at Tech Corp\n- Responsible for managing a team of developers.\n- Used React to build frontends for various clients.\n\nEducation\nB.S. Computer Science\n\nReferences available upon request`;
+        console.error("Parse error", error);
+        throw error;
       }
     },
   });
@@ -63,27 +62,18 @@ export function useParseResume() {
 export function useAnalyzeResume() {
   return useMutation({
     mutationFn: async (data: AnalyzeInput) => {
-      try {
-        // We use fetch directly since we want to handle the response parsing manually
-        // and provide a robust fallback if the backend isn't fully wired yet.
-        const res = await fetch(api.analyze.path, {
-          method: api.analyze.method,
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
-        });
+      const res = await fetch(api.analyze.path, {
+        method: api.analyze.method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
 
-        if (!res.ok) {
-          throw new Error("Analysis failed");
-        }
-
-        const json = await res.json();
-        return api.analyze.responses[200].parse(json);
-      } catch (error) {
-        console.warn("[Analyze Resume] Backend error or missing, using robust mock data.", error);
-        // Simulate network delay
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        return MOCK_ANALYSIS;
+      if (!res.ok) {
+        throw new Error("Analysis failed");
       }
+
+      const json = await res.json();
+      return api.analyze.responses[200].parse(json);
     },
   });
 }
