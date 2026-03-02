@@ -52,7 +52,8 @@ export default function Dashboard() {
         resumeText,
         jobDescription: jobDescription || undefined
       });
-      setActiveIssues(results.issues);
+      console.log("Analysis results:", results);
+      setActiveIssues(results.issues || []);
     } catch (error) {
       console.error("Analysis error", error);
     }
